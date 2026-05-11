@@ -3,7 +3,7 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const Imap = require('imap');
 const { simpleParser } = require('mailparser');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID: uuidv4 } = require('crypto');
 const cors = require('cors');
 
 // PRISMA CLIENT SETUP
