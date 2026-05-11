@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const API = 'https://krapteremailtool.onrender.com/api';
+// AB YE .env SE URL UTHAYEGA
+const API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'https://krapteremailtool.onrender.com/api';
 
 // ─── Status Badge ─────────────────────────────────────────────
 const STATUS = {
@@ -160,17 +161,16 @@ function DetailModal({ emailId, onClose, onDelete }) {
           <button onClick={onClose} style={{ border:'none', background:'none', fontSize:22, cursor:'pointer', color:'#6b7280' }}>×</button>
         </div>
 
-        {/* Email Info */}
         <div style={{ background:'#f9fafb', borderRadius:10, padding:18, marginBottom:20 }}>
           {[
-            { label:'To',           value: email.to_email },
+            { label:'To',         value: email.toEmail }, // SQLite: to_email -> Postgres: toEmail
             { label:'Subject',      value: email.subject },
             { label:'Status',       value: <Badge status={email.status} /> },
-            { label:'Sent',         value: fmt(email.sent_at) },
-            { label:'Open Count',   value: <span style={{ fontWeight:700, color: email.open_count > 0 ? '#059669' : '#9ca3af' }}>{email.open_count} baar</span> },
-            { label:'Pehli baar',   value: fmt(email.first_opened) },
-            { label:'Aakhri baar',  value: fmt(email.last_opened) },
-            { label:'Reply',        value: fmt(email.replied_at) },
+            { label:'Sent',         value: fmt(email.sentAt) }, // sent_at -> sentAt
+            { label:'Open Count',   value: <span style={{ fontWeight:700, color: email.openCount > 0 ? '#059669' : '#9ca3af' }}>{email.openCount} baar</span> }, // open_count -> openCount
+            { label:'Pehli baar',   value: fmt(email.firstOpened) }, // first_opened -> firstOpened
+            { label:'Aakhri baar',  value: fmt(email.lastOpened) }, // last_opened -> lastOpened
+            { label:'Reply',        value: fmt(email.repliedAt) }, // replied_at -> repliedAt
           ].map(row => (
             <div key={row.label} style={{ display:'flex', gap:12, marginBottom:10, alignItems:'center' }}>
               <span style={{ fontSize:12, fontWeight:600, color:'#6b7280', minWidth:90 }}>{row.label}</span>
@@ -179,7 +179,6 @@ function DetailModal({ emailId, onClose, onDelete }) {
           ))}
         </div>
 
-        {/* Open History */}
         {opens.length > 0 && (
           <>
             <h3 style={{ fontSize:14, fontWeight:700, color:'#374151', marginBottom:12 }}>
@@ -193,10 +192,10 @@ function DetailModal({ emailId, onClose, onDelete }) {
                   border:`1px solid ${i === 0 ? '#6ee7b7' : '#e5e7eb'}`
                 }}>
                   <div style={{ fontSize:13, fontWeight:600, color:'#111' }}>
-                    {i === 0 ? '🟢 ' : ''}{fmt(o.opened_at)}
+                    {i === 0 ? '🟢 ' : ''}{fmt(o.openedAt)}
                   </div>
                   <div style={{ fontSize:11, color:'#9ca3af', marginTop:3, wordBreak:'break-all' }}>
-                    {o.user_agent || 'Unknown device'}
+                    {o.userAgent || 'Unknown device'}
                   </div>
                 </div>
               ))}
@@ -204,7 +203,6 @@ function DetailModal({ emailId, onClose, onDelete }) {
           </>
         )}
 
-        {/* Delete Button */}
         <div style={{ display:'flex', justifyContent:'flex-end' }}>
           <button onClick={() => { onDelete(email.id); onClose(); }} style={{
             padding:'8px 18px', borderRadius:8, border:'1.5px solid #fecaca',
@@ -220,12 +218,12 @@ function DetailModal({ emailId, onClose, onDelete }) {
 
 // ─── Main App ─────────────────────────────────────────────────
 export default function App() {
-  const [emails,      setEmails]      = useState([]);
-  const [stats,       setStats]       = useState({ total:0, delivered:0, opened:0, replied:0, total_opens:0 });
+  const [emails,       setEmails]       = useState([]);
+  const [stats,        setStats]        = useState({ total:0, delivered:0, opened:0, replied:0, total_opens:0 });
   const [showCompose, setShowCompose] = useState(false);
-  const [selectedId,  setSelectedId]  = useState(null);
-  const [search,      setSearch]      = useState('');
-  const [filter,      setFilter]      = useState('all');
+  const [selectedId,   setSelectedId]  = useState(null);
+  const [search,       setSearch]      = useState('');
+  const [filter,       setFilter]      = useState('all');
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const load = useCallback(async () => {
@@ -253,12 +251,11 @@ export default function App() {
     load();
   };
 
-  // Filter + Search
   const filtered = emails
     .filter(e => filter === 'all' || e.status === filter)
     .filter(e =>
       !search ||
-      e.to_email.toLowerCase().includes(search.toLowerCase()) ||
+      e.toEmail.toLowerCase().includes(search.toLowerCase()) ||
       e.subject.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -325,7 +322,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* Search + Filter Bar */}
+        {/* Search Bar */}
         <div style={{ display:'flex', gap:12, marginBottom:16, alignItems:'center' }}>
           <input
             value={search}
@@ -383,7 +380,7 @@ export default function App() {
                   onMouseEnter={e => e.currentTarget.style.background='#f8fafc'}
                   onMouseLeave={e => e.currentTarget.style.background='#fff'}>
                   <td style={{ padding:'13px 16px', fontSize:14, maxWidth:160, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
-                    {email.to_email}
+                    {email.toEmail}
                   </td>
                   <td style={{ padding:'13px 16px', fontSize:14, maxWidth:200, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', color:'#374151' }}>
                     {email.subject}
@@ -391,11 +388,11 @@ export default function App() {
                   <td style={{ padding:'13px 16px' }}>
                     <Badge status={email.status} />
                   </td>
-                  <td style={{ padding:'13px 16px', fontSize:14, fontWeight:700, color: email.open_count > 0 ? '#059669' : '#cbd5e1' }}>
-                    {email.open_count > 0 ? `${email.open_count}×` : '—'}
+                  <td style={{ padding:'13px 16px', fontSize:14, fontWeight:700, color: email.openCount > 0 ? '#059669' : '#cbd5e1' }}>
+                    {email.openCount > 0 ? `${email.openCount}×` : '—'}
                   </td>
                   <td style={{ padding:'13px 16px', fontSize:13, color:'#64748b', whiteSpace:'nowrap' }}>
-                    {fmt(email.sent_at)}
+                    {fmt(email.sentAt)}
                   </td>
                   <td style={{ padding:'13px 16px' }}>
                     <button
@@ -412,10 +409,6 @@ export default function App() {
               ))}
             </tbody>
           </table>
-        </div>
-
-        <div style={{ textAlign:'center', marginTop:16, fontSize:12, color:'#94a3b8' }}>
-          Auto-refresh har 10 seconds mein • {filtered.length} email{filtered.length !== 1 ? 's' : ''} dikh rahe hain
         </div>
       </div>
     </div>
