@@ -36,6 +36,10 @@ transporter.verify((err, success) => {
 // ─────────────────────────────────────────
 // 1. EMAIL BHEJO (Prisma Version)
 // ─────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.send('Email Tracker API is running');
+});
+
 app.post('/api/send', async (req, res) => {
   const { to, subject, body } = req.body;
 
