@@ -1,5 +1,51 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# --- Dependencies ---
+email-dashboard/node_modules/
+email-tracker/node_modules/
 
-/generated/prisma
+# --- Environment Variables ---
+# Sabhi .env files ignore karein
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+**/node_modules/
+
+# Lekin example files ko allow karein taaki template dikhe
+!**/example.env
+!**/.env.example
+
+# --- Build & Compiled Outputs ---
+email-dashboard/dist/
+email-dashboard/build/
+email-tracker/dist/
+email-tracker/build/
+out/
+.next/
+
+# --- Compressed & Archive Files ---
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# --- Logs & Tests ---
+**/*.log
+email-dashboard/logs/
+email-tracker/logs/
+coverage/
+.npm
+.eslintcache
+
+# --- System & IDE Files ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- Temporary Files ---
+*.tmp
+*.temp

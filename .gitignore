@@ -9,6 +9,7 @@ email-tracker/node_modules/
 **/.env.development.local
 **/.env.test.local
 **/.env.production.local
+**/node_modules/
 
 # Lekin example files ko allow karein taaki template dikhe
 !**/example.env
