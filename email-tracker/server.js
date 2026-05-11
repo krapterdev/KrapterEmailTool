@@ -38,12 +38,19 @@ app.use(cors({
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT) || 587,
-  secure: false,
+  secure: false, 
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
-  tls: { rejectUnauthorized: false }
+   connectionTimeout: 10000, 
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+  dnsV11: false, 
+  tls: {
+    rejectUnauthorized: false,
+    minVersion: 'TLSv1.2'
+  }
 });
 
 transporter.verify((err) => {
