@@ -32,7 +32,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.options('*', cors()); // Pre-flight handling
+app.options('(.*)', cors());
 app.use(express.json());
 
 // ─── SMTP TRANSPORTER ─────────────────────────────────────────

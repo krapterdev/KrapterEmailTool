@@ -7,6 +7,9 @@
     "start": "node server.js",
     "build": "npm install && npm rebuild sqlite3"
   },
+  "engines": {
+    "node": "20.10.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
