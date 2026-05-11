@@ -2,9 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const Imap = require('imap');
+const cors = require('cors');
 const { simpleParser } = require('mailparser');
 const { randomUUID: uuidv4 } = require('crypto');
-const cors = require('cors');
 
 // PRISMA CLIENT SETUP
 const { PrismaClient } = require('@prisma/client');
@@ -32,8 +32,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.options('(.*)', cors());
-app.use(express.json());
+ app.use(express.json());
 
 // ─── SMTP TRANSPORTER ─────────────────────────────────────────
 const transporter = nodemailer.createTransport({
