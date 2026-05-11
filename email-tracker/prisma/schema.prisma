@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Email {
+  id          String   @id @default(uuid())
+  toEmail     String
+  subject     String
+  body        String?
+  sentAt      DateTime @default(now())
+  messageId   String?
+  status      String   @default("sent")
+  openCount   Int      @default(0)
+  firstOpened DateTime?
+  lastOpened  DateTime?
+  repliedAt   DateTime?
+  opens       Open[]
+
+  @@map("emails")
+}
+
+model Open {
+  id        Int      @id @default(autoincrement())
+  emailId   String
+  openedAt  DateTime @default(now())
+  userAgent String?
+  ip        String?
+  email     Email    @relation(fields: [emailId], references: [id], onDelete: Cascade)
+
+  @@map("opens")
+}

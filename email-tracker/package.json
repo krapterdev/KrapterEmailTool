@@ -5,23 +5,22 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": "20.x"
+    "build": "npm install && npm rebuild sqlite3"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "imap": "^0.8.19",
     "mailparser": "^3.9.8",
     "nodemailer": "^8.0.7",
-    "sqlite3": "^6.0.1",
+    "pg": "^8.20.0",
+    "prisma": "^6.19.3",
     "uuid": "^14.0.0"
   }
 }
