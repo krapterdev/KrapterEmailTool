@@ -16,7 +16,7 @@ const app = express();
 const allowedOrigins = [
   "https://krapter-email-tool.vercel.app",
   "https://krapter-email-tool-f51hbtklo-krapters-projects.vercel.app/",
-  // , 'http://localhost:3000',
+   'http://localhost:3000',
   // 'http://localhost:5173'
 ];
 
